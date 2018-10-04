@@ -13,6 +13,7 @@ use app\models\Category;
 use core\base\Controller;
 use core\base\View;
 use core\system\Auth;
+use core\system\Request;
 use core\system\Url;
 
 class Post extends Controller
@@ -36,5 +37,94 @@ class Post extends Controller
             return;
         }
 
+        try{
+            if(!Request::containsPost("name","category","content"))
+                throw new \Exception("Заполните все поля");
+            if(!Request::containsFile("image")) throw new \Exception("Файл не задан");
+
+            if(!Request::isAccessFileExtension("image",['png','jpeg','gif']))
+                throw new \Exception("Формат файла должен быть jpeg, png или gif");
+
+            $name = Request::saveIncomingFileWithRandomName("image","images");
+            if($name===false) throw new \Exception("При загрузке файла произошла ошибка");
+
+            $post = new \app\models\Post();
+            $post->name = Request::post("name");
+            $post->content = Request::post("content");
+            $post->category_id = (int)Request::post("category");
+            $post->image = $name;
+
+            $user = Auth::instance()->getCurrentUser();
+            $post->user_id = $user->id;
+            $post->time = time();
+
+
+            try{
+                $post->save();
+            }catch (\Exception $e){
+                throw new \Exception("ошибка сохранения, попробуйте еще раз");
+            }
+            Url::redirect("/");
+
+        }catch (\Exception $e){
+            $v = new View("auth/error");
+            $v->message = "При добавлении поста произошла ошибка";
+            $v->details = $e->getMessage();
+            $v->url = $_SERVER["HTTP_REFERER"];
+            $v->auth=Auth::instance()->isAuth();
+            $v->user=Auth::instance()->getCurrentUser();
+            $v->setTemplate();
+            echo $v->render();
+        }
+
+    }
+
+    public function action_view()
+    {
+        try {
+            if (empty(Request::get("id"))) throw new \Exception("");
+            $post = \app\models\Post::where('id', (int)Request::get("id"))->first() ;
+            if ($post->isEmpty()) throw new \Exception("");
+            $post->time = strftime("%H:%M %d.%m.%Y",$post->time);
+            $v = new View("posts/show");
+            $v->auth=Auth::instance()->isAuth();
+            $v->user=Auth::instance()->getCurrentUser();
+            $v->post=$post;
+            $v->setTemplate();
+            echo  $v->render();
+        }catch (\Exception $e){
+            Url::redirect("/404");
+            return;
+        }
+
+    }
+
+    const POST_PER_PAGE=2;
+    public function action_category()
+    {
+        try {
+            if (empty(Request::get("catid"))) throw new \Exception("");
+            $category = Category::where("id",(int)Request::get("catid"))->first();
+            if($category->isEmpty()) throw new \Exception("");
+
+            $page = empty(Request::get("page"))?1:Request::get("page");
+            $posts = $category->posts()->getPage((int)$page,self::POST_PER_PAGE);
+            $count = $category->posts()->getPageCount(self::POST_PER_PAGE);
+
+            $v = new View("posts/cat");
+            $v->auth=Auth::instance()->isAuth();
+            $v->user=Auth::instance()->getCurrentUser();
+            $v->categories=Category::all();
+            $v->posts=$posts;
+            $v->pc = $count;
+            $v->page = $page;
+            $v->urlbase = Url::getPath()."?catid=".Request::get("catid");
+            $v->setTemplate();
+            echo  $v->render();
+        }catch (\Exception $e){
+            Url::redirect("/404");
+            //echo $e->getMessage();
+            return;
+        }
     }
 }

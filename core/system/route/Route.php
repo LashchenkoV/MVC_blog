@@ -6,13 +6,13 @@
  * Time: 19:45
  */
 
-namespace core\system;
+namespace core\system\route;
 
 class Route
 {
-    private $rule;
-    private $controller;
-    private $action;
+    protected $rule;
+    protected $controller;
+    protected $action;
 
 
     public function __construct(string $rule,string $controller,string $action){
@@ -22,10 +22,10 @@ class Route
     }
 
 
-    private function getClearPath(){
+    protected function getClearPath(){
         return trim(Url::getPath(),"/");
     }
-    private function getClearRule(){
+    protected function getClearRule(){
         return trim($this->rule,"/");
     }
 

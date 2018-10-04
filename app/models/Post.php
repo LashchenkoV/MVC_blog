@@ -13,6 +13,7 @@ use core\base\Model;
 
 class Post extends Model
 {
+    public static $table="post";
     public function author(){
         return $this->belongsTo(User::class,"user_id","id");
     }

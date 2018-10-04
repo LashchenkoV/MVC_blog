@@ -72,13 +72,12 @@
 
             <h2>Categories :</h2>
             <ul>
-                <li><a href="#">World Politics</a></li>
+                {% for cat in categories %}
+                <li><a href="/posts/category?catid={{ cat.id }}">{{ cat.name }}</a></li>
+                {% endfor %}
             </ul>
 
-            <h2>Archives</h2>
-            <ul>
-                <li><a href="#">January 2007</a></li>
-            </ul>
+
 
         </div>
         <div style="clear: both;"> </div>

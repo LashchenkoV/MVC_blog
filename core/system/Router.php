@@ -3,10 +3,12 @@
 namespace core\system;
 
 use core\system\exceptions\RouterException;
+use core\system\route\Route;
 
 class Router
 {
     private static $inst=null;
+    private $activeRoute=null;
 
     public static function instance(){
         return self::$inst!==null? self::$inst : self::$inst=new self();
@@ -23,6 +25,7 @@ class Router
     public function navigate(){
         foreach ($this->routes as $route){
             if($route->compareRoute()){
+                $this->activeRoute = $route;
                 $this->navigateTo($route->getController(),$route->getAction());
                 return;
             }
@@ -43,5 +46,11 @@ class Router
         $ctrl->$action_name();
 
     }
+
+    public function getActiveRoute()
+    {
+        return $this->activeRoute;
+    }
+
 
 }

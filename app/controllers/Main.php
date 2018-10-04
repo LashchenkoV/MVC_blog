@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Category;
 use app\models\Post;
 use app\models\User;
 use core\base\Controller;
@@ -17,8 +18,12 @@ class Main extends Controller
     {
 
         $v = new View("main");
+
+
+        $v->posts = Post::limit(10)->desc("id")->all();
         $v->auth=Auth::instance()->isAuth();
         $v->user=Auth::instance()->getCurrentUser();
+        $v->categories = Category::all();
         $v->setTemplate();
         echo $v->render();
     }

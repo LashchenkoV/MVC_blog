@@ -14,4 +14,7 @@ use core\base\Model;
 class Category extends Model
 {
     public static $table="categories";
+    public function posts(){
+        return $this->hasMany(Post::class,"category_id");
+    }
 }
