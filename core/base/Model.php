@@ -77,7 +77,7 @@ abstract class Model
         $field2 = $field2 === null?$class::getTableName()."_id":$field2;
 
         return call_user_func("{$class}::join",$interTable,"id",$field2,$class::getTableName())
-            ->where($interTable.".".$field,$this->data['id']);
+            ->where($interTable.".".$field,$this->data['id'])->fields([$class::getTableName().".*"]);
     }
     protected function belongsTo(string $class, string $link_field, string $key="id")
     {

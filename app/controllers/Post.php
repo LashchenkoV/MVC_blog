@@ -10,22 +10,24 @@ namespace app\controllers;
 
 
 use app\models\Category;
+use app\models\User;
 use core\base\Controller;
 use core\base\View;
 use core\system\Auth;
 use core\system\Request;
 use core\system\route\Route;
 use core\system\Router;
+use core\system\Session;
 use core\system\Url;
 
 class Post extends Controller
 {
     public function action_add()
     {
-
-
         $v = new View("posts/add");
         $v->auth=Auth::instance()->isAuth();
+        if($v->auth)
+            $v->isAdmin = User::where("id",Session::instance()->getUserId())->first()->hasRole("admin");
         $v->user=Auth::instance()->getCurrentUser();
         $v->categories = Category::all();
         $v->setTemplate();
@@ -90,6 +92,8 @@ class Post extends Controller
             $post->time = strftime("%H:%M %d.%m.%Y",$post->time);
             $v = new View("posts/show");
             $v->auth=Auth::instance()->isAuth();
+            if($v->auth)
+                $v->isAdmin = User::where("id",Session::instance()->getUserId())->first()->hasRole("admin");
             $v->user=Auth::instance()->getCurrentUser();
             $v->categories=Category::all();
             $v->post=$post;
@@ -118,6 +122,8 @@ class Post extends Controller
 
             $v = new View("posts/cat");
             $v->auth=Auth::instance()->isAuth();
+            if($v->auth)
+                $v->isAdmin = User::where("id",Session::instance()->getUserId())->first()->hasRole("admin");
             $v->user=Auth::instance()->getCurrentUser();
             $v->categories=Category::all();
             $v->posts=$posts;
