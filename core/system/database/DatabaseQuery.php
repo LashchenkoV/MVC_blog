@@ -189,8 +189,8 @@ class DatabaseQuery
 
     private function _join($far_table,$far_field,$cur_field,$cur_table,$type="INNER"){
         $cur_table = $cur_table===NULL ? $this->table : $cur_table;
-        $far_field = self::_field($far_table.".".$far_field);
-        $cur_field = self::_field($cur_table.".".$cur_field);
+        $far_field = self::_field($cur_table.".".$far_field);
+        $cur_field = self::_field($far_table.".".$cur_field);
 
         $on = "({$far_field} = {$cur_field})";
         $this->comp->join[] = [$type,self::_field($far_table),$on];
@@ -277,6 +277,9 @@ class DatabaseQuery
             .$this->buildOrder()
             .$this->buildLimit()
             .$this->buildOffset();
+    }
+    public function printS(){
+        return $this->buildSelect();
     }
     private function buildSelectCount()
     {

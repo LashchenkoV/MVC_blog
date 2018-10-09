@@ -22,7 +22,9 @@ class View
     public function __set($name,$value){
         $this->params[$name]=$value;
     }
-
+    public function __get($name){
+        return $this->params[$name];
+    }
     public function __construct(string $name){
         $this->path = "views/".$name.".twig";
         $this->loader = new \Twig_Loader_Filesystem(APP_PATH);

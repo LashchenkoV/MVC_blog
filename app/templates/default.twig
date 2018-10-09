@@ -50,6 +50,9 @@
             <li><a href="/">Home</a></li>
             {% if(auth) %}
             <li><a href="/posts/add">New post</a></li>
+                {% if isAdmin %}
+                    <li><a href="/admin">Admin panel</a></li>
+                {% endif %}
             {% endif %}
 
 

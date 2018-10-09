@@ -28,6 +28,9 @@ class RouteConfigurator
         Router::instance()->addRoute(new Route("logout","auth","logout"));
 
 
+        Router::instance()->addRoute(new Route("admin","admin","index"));
+
+
         //posts
         Router::instance()->addRoute(new Route("posts/add","post","add"));
         Router::instance()->addRoute(new Route("posts/add/handle","post","add_handle"));

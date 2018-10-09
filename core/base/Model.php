@@ -71,6 +71,14 @@ abstract class Model
     {
         return call_user_func("{$class}::where",$link_field,$this->data[$key]);
     }
+    protected function belongsToMany($class,$interTable,$field=null,$field2=null)
+    {
+        $field = $field === null?self::getTableName()."_id":$field;
+        $field2 = $field2 === null?$class::getTableName()."_id":$field2;
+
+        return call_user_func("{$class}::join",$interTable,"id",$field2,$class::getTableName())
+            ->where($interTable.".".$field,$this->data['id']);
+    }
     protected function belongsTo(string $class, string $link_field, string $key="id")
     {
         return call_user_func("{$class}::where",$key,$this->data[$link_field])->first();

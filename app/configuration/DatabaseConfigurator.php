@@ -17,7 +17,7 @@ class DatabaseConfigurator
             'port'=>3306,
             'dbname'=>'blog',
             'user'=>'root',
-            'pass'=>'0000',
+            'pass'=>'root',
             'charset'=>'utf8'
         ],
         'custom1'=>[
