@@ -49,6 +49,11 @@ class ParametricalRoute extends Route
     }
 
 
+    public function getBasePath()
+    {
+        $rule = $this->getClearRule();
+        return "/".trim(preg_replace('/\{\??([a-z0-9]+)\}/i',"",$rule),"/");
+    }
 
 
 }

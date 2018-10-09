@@ -10,6 +10,7 @@ namespace app\controllers;
 
 
 
+use app\models\Category;
 use app\models\User;
 use core\base\Controller;
 use core\base\View;
@@ -29,6 +30,7 @@ class Auth extends Controller
         $v = new View("auth/register");
         $v->auth=ModuleAuth::instance()->isAuth();
         $v->user=ModuleAuth::instance()->getCurrentUser();
+        $v->categories=Category::all();
         $v->setTemplate();
         echo $v->render();
     }
@@ -40,6 +42,7 @@ class Auth extends Controller
         $v = new View("auth/login");
         $v->auth=ModuleAuth::instance()->isAuth();
         $v->user=ModuleAuth::instance()->getCurrentUser();
+        $v->categories=Category::all();
         $v->setTemplate();
         echo $v->render();
     }
@@ -57,6 +60,7 @@ class Auth extends Controller
             $v->message = "При авторизации произошла ошибка";
             $v->details = $e->getMessage();
             $v->url=$_SERVER["HTTP_REFERER"];
+            $v->categories=Category::all();
             $v->setTemplate();
             echo $v->render();
         }
@@ -90,6 +94,7 @@ class Auth extends Controller
             $v->message = "При регистрации произошла ошибка";
             $v->details = $e->getMessage();
             $v->url=$_SERVER["HTTP_REFERER"];
+            $v->categories=Category::all();
             $v->setTemplate();
             echo $v->render();
         }

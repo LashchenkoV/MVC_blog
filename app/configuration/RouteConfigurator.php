@@ -31,9 +31,8 @@ class RouteConfigurator
         //posts
         Router::instance()->addRoute(new Route("posts/add","post","add"));
         Router::instance()->addRoute(new Route("posts/add/handle","post","add_handle"));
-        Router::instance()->addRoute(new Route("posts/view","post","view"));
-        Router::instance()->addRoute(new Route("posts/category","post","category"));
-        //Router::instance()->addRoute(new ParametricalRoute("posts/category/{catid}/{?page}","post","category"));
+        Router::instance()->addRoute(new ParametricalRoute("posts/{id}","post","view"));
+        Router::instance()->addRoute(new ParametricalRoute("posts/category/{catid}/{?page}","post","category"));
 
         Router::instance()->addRoute(new Route("404","c404","index"));
     }

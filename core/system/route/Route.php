@@ -8,6 +8,10 @@
 
 namespace core\system\route;
 
+
+
+use core\system\Url;
+
 class Route
 {
     protected $rule;
@@ -41,6 +45,10 @@ class Route
 
     public function getAction(): string{
         return $this->action;
+    }
+
+    public function getBasePath(){
+        return "/".$this->getClearRule();
     }
 
 

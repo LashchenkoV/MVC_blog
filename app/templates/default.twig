@@ -73,7 +73,7 @@
             <h2>Categories :</h2>
             <ul>
                 {% for cat in categories %}
-                <li><a href="/posts/category?catid={{ cat.id }}">{{ cat.name }}</a></li>
+                <li><a href="/posts/category/{{ cat.id }}">{{ cat.name }}</a></li>
                 {% endfor %}
             </ul>
 

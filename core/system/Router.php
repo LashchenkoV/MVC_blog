@@ -47,7 +47,7 @@ class Router
 
     }
 
-    public function getActiveRoute()
+    public function getActiveRoute():Route
     {
         return $this->activeRoute;
     }
